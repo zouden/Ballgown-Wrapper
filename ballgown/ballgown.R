@@ -51,7 +51,10 @@ bgi_filt= subset(bgi, paste("rowVars(texpr(bgi)) >",filtstr), genomesubset = TRU
 # Checking if there's one or more adjust variables in the phenotype data file
 # ----------------------------------------------------------------------------------------
 
-if (ncol(pData(bgi))<=3) {
+if (ncol(pData(bgi))==2) {
+  results_transcripts=stattest(bgi_filt,feature = "transcript", covariate = colnames(pData(bgi))[pdat], getFC = TRUE, meas = "FPKM")
+  results_genes=stattest(bgi_filt,feature = "gene", covariate = colnames(pData(bgi))[pdat], getFC = TRUE, meas = "FPKM")
+} else if (ncol(pData(bgi))==3) {
   results_transcripts=stattest(bgi_filt,feature = "transcript", covariate = colnames(pData(bgi))[pdat], adjustvars = colnames(pData(bgi)[pdat+1]), getFC = TRUE, meas = "FPKM")
   results_genes=stattest(bgi_filt,feature = "gene", covariate = colnames(pData(bgi))[pdat], adjustvars = colnames(pData(bgi)[pdat+1]), getFC = TRUE, meas = "FPKM")
 } else {
